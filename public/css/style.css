@@ -63,3 +63,11 @@ a:hover {
     margin-top: 27px;
     padding: 1rem 0 !important;
 }
+
+.alert.ajax {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1500;
+}

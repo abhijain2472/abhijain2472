@@ -67,27 +67,28 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item @yield('active-main-blog')">
+            <li class="nav-item @yield('active-main-product')">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Blog Post</span>
+                    <span>Product</span>
                 </a>
-                <div id="collapseUtilities" class="collapse @yield('active-main-blog-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="collapseUtilities" class="collapse @yield('active-main-product-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item @yield('active-main-blog-add')" href="{{URL::to('add-blog-post')}}">Add Blog Post</a>
-                        <a class="collapse-item @yield('active-main-blog-list')" href="{{URL::to('blog-post-list')}}">Blog Posts</a>
+                        <a class="collapse-item @yield('active-main-product-add')" href="{{URL::to('add-product')}}">Add Product</a>
+                        <a class="collapse-item @yield('active-main-product-list')" href="{{URL::to('product-list')}}">Products</a>
                     </div>
                 </div>
             </li>
 
-            <li class="nav-item @yield('active-main-blog-view')">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#viewblogs" aria-expanded="true" aria-controls="viewblogs">
+            <li class="nav-item @yield('active-main-slider')">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>View</span>
+                    <span>Slider</span>
                 </a>
-                <div id="viewblogs" class="collapse @yield('active-main-blog-view-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="collapseUtilities" class="collapse @yield('active-main-slider-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item @yield('active-main-blog-view-list')" href="{{URL::to('blog-post-view-list')}}">View Blogs</a>
+                        <a class="collapse-item @yield('active-main-slider-add')" href="{{URL::to('add-slider')}}">Add Slider</a>
+                        <a class="collapse-item @yield('active-main-slider-list')" href="{{URL::to('slider-list')}}">Sliders</a>
                     </div>
                 </div>
             </li>
@@ -368,18 +369,18 @@
     <script src="{{DIR_HTTP_VENDOR}}jquery/jquery.min.js"></script>
     <script src="{{DIR_HTTP_JS}}sb-admin-2.min.js"></script>
     <script src="{{DIR_HTTP_VENDOR}}bootstrap/js/bootstrap.bundle.min.js"></script>
-  
+
     <!-- Core plugin JavaScript-->
     <script src="{{DIR_HTTP_VENDOR}}jquery-easing/jquery.easing.min.js"></script>
     <script src="{{DIR_HTTP_VENDOR}}jquery/jquery.cookie.js"></script>
-  
+
     <!-- Page level plugins -->
     <script src="{{DIR_HTTP_VENDOR}}datatables/jquery.dataTables.min.js"></script>
     <script src="{{DIR_HTTP_VENDOR}}datatables/dataTables.bootstrap4.min.js"></script>
     <script src="{{DIR_HTTP_JS}}script.js"></script>
     <script src="{{DIR_HTTP_JS}}import.js"></script>
     <script src="{{DIR_HTTP_JS}}blog-table.js"></script>
-  
+
     <!-- Page level custom scripts -->
     {{-- <script src="{{DIR_HTTP_JS}}demo/datatables-demo.js"></script> --}}
     @yield("internal-js")

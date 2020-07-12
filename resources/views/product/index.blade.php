@@ -1,21 +1,21 @@
 @extends('layout')
 
-@section('page-title', "List Categories")
-@section('page-heading', "List Categories")
-@section('page-description', "Here you can view/delete categories.")
+@section('page-title', "List Products")
+@section('page-heading', "List Products")
+@section('page-description', "Here you can view/delete products.")
 
-@section('active-main-category', 'active')
-@section('active-main-category-div', 'show')
-@section('active-main-category-list', 'active')
+@section('active-main-product', 'active')
+@section('active-main-product-div', 'show')
+@section('active-main-product-list', 'active')
 
 @section('admin-card-header')
     <div class="row justify-content-between w-100 align-items-center">
         <div class="col-auto">
-            <span>All Categories</span>
+            <span>All Products</span>
         </div>
 
         <div class="col-auto">
-            <button class="btn btn-success navigate" data-src="/add-category">Add Category</button>
+            <button class="btn btn-success navigate" data-src="/add-product">Add Product</button>
         </div>
     </div>
 @endsection
@@ -40,11 +40,13 @@
             <thead>
                 <tr>
                     <th>Sr No.</th>
-                    <th>Category Name</th>
+                    <th>Product Name</th>
                     <th data-sort="false">Image</th>
+                    <th>Category Name</th>
+                    <th>Product Price</th>
+                    <th>Product Discount</th>
                     <th>Created At</th>
                     <th>Updated At</th>
-                    <th>Sort Order</th>
                     <th>Status</th>
                     <th data-sort="false"></th>
                 </tr>
@@ -53,35 +55,35 @@
                 @php
                     $count = 1;
                 @endphp
-                @foreach ($categories as $key => $item)
+                @foreach ($products as $key => $item)
                     <tr>
                         <td>{{ $count++ }}</td>
-                        <td>{{ $item->name }}</td>
-                        <td>
-                            <img src="{{ $item->icon }}" alt="{{ $item->name }}" width="70" height="70">
-                        </td>
-                        <td>{{ $item->created_at }}</td>
-                        <td>{{ $item->updated_at }}</td>
-                        <td>{{ $item->sort_order }}</td>
+                        <td>{{ $item['product_name'] }}</td>
+                        <td>{!! $item['product_image'] !!}</td>
+                        <td>{{ $item['category'][0]['name'] }}</td>
+                        <td>{{ $item['product_price'] }}</td>
+                        <td>{{ $item['discount'] }}</td>
+                        <td>{{ $item['created_at'] }}</td>
+                        <td>{{ $item['updated_at'] }}</td>
                         <td>
                             @php
                                 $checked = "";
                             @endphp
-                            @if ($item->status == "1")
+                            @if ($item['status'] == "1")
                                 @php
                                     $checked = "checked";
                                 @endphp
                             @endif
                             <div class='custom-control custom-switch'>
-                                <input type='checkbox' class='custom-control-input ajax-status' id='status_{{ $item->category_id }}' value="on" {{ $checked }}>
-                                <label class='custom-control-label' for='status_{{ $item->category_id }}'></label>
+                                <input type='checkbox' class='custom-control-input ajax-status' id='status_{{ $item['product_id'] }}' value="on" {{ $checked }}>
+                                <label class='custom-control-label' for='status_{{ $item['product_id'] }}'></label>
                             </div>
                         </td>
                         <td>
-                            <a href='add-category/{{ $item->category_id }}' title='Edit Category'>
+                            <a href='/add-product/{{ $item['product_id'] }}' title='Edit Product'>
                                 <i class='far fa-edit'></i>
                             </a>
-                            <a href='javascript:return false;' onclick='getWarning({{ $item->category_id }})' data-toggle='modal' data-target='#deleteModal' class='text-danger' title='Delete Category'>
+                            <a href='javascript:return false;' onclick='getWarning({{ $item['product_id'] }})' data-toggle='modal' data-target='#deleteModal' class='text-danger' title='Delete Product'>
                                 <i class='far fa-trash-alt'></i>
                             </a>
                         </td>
@@ -100,8 +102,8 @@
                 <div class="modal-body">
                     <div class="loader text-center"></div>
                     <div class="content">
-                        <input type="hidden" id="delCategoryId">
-                        Are you sure to want to delete category <strong id="delCategoryName"></strong> ?
+                        <input type="hidden" id="delProductId">
+                        Are you sure to want to delete product <strong id="delProductName"></strong> ?
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -117,7 +119,7 @@
 <script>
     function getWarning(id) {
         $.ajax({
-            url: '/get-category/'+id,
+            url: '/get-product/'+id,
             type: 'GET',
             beforeSend: function() {
                 $(".loader").html('<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>');
@@ -125,8 +127,9 @@
             },
             success: function(data) {
                 data = JSON.parse(data);
-                $("#delCategoryId").val(data['category_id']);
-                $("#delCategoryName").text(data['name']);
+                console.log(data)
+                $("#delProductId").val(data['product_id']);
+                $("#delProductName").text(data['product_name'] + " ( "+data['category'][0]['name']+" )");
             },
             complete: function () {
                 $(".loader").html('');
@@ -137,7 +140,7 @@
 
     $(document).ready(function() {
         $("#deleteButton").click(function() {
-            window.location.href = "/delete-category/"+$("#delCategoryId").val()
+            window.location.href = "/delete-product/"+$("#delProductId").val()
         });
 
         $(document).on("change", ".ajax-status", function() {
@@ -145,7 +148,7 @@
             var id = $(this).attr("id").split("_")[1]
             status = (status) ? "1" : "0";
             $.ajax({
-                url: '/category/change-status/'+id,
+                url: '/product/change-status/'+id,
                 type: 'POST',
                 data: {status: status, _token: $("#csrf").val()},
                 beforeSend: function() {

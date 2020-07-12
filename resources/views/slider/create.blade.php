@@ -1,25 +1,25 @@
 @extends('layout')
 
-@isset($category['category_id'])
+@isset($slider['slider_id'])
     @php
-    foreach ($category as $key => $value) {
-        $cat[$key] = $value;
+    foreach ($slider as $key => $value) {
+        $slid[$key] = $value;
     }
     @endphp
 @endisset
 
-@section('page-title', "$addText Category")
-@section('page-heading', "$addText Category")
+@section('page-title', "$addText Slider")
+@section('page-heading', "$addText Slider")
 @section('page-description', $description)
 
-@section('active-main-category', 'active')
-@section('active-main-category-div', 'show')
-@section('active-main-category-add', 'active')
+@section('active-main-slider', 'active')
+@section('active-main-slider-div', 'show')
+@section('active-main-slider-add', 'active')
 
 @section('admin-card-header')
     <div class="row justify-content-between">
         <div class="col-auto">
-            <span>{{ $addText }} Category Form</span>
+            <span>{{ $addText }} Slider Form</span>
         </div>
     </div>
 @endsection
@@ -40,33 +40,42 @@
     @endif
     <div class="row justify-content-between">
         <div class="col-12">
-            <form action="/post-form-category/{{ $cat['category_id'] }}" method="POST" enctype="multipart/form-data">
+            <form action="/post-form-slider/{{ $slid['slider_id'] }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group row align-items-center">
                     <div class="col-2">
-                        <label for="name">Category Title</label>
+                        <label for="slider_title">Slider Title</label>
                     </div>
                     <div class="col">
-                        <input type="text" name="name" id="name" class="form-control" value="{{ $cat['name'] }}">
+                        <input type="text" name="slider_title" id="slider_title" class="form-control" value="{{ $slid['slider_title'] }}">
                     </div>
                 </div>
 
                 <div class="row form-group">
                     <div class="col-2"></div>
-                    @if ($cat['icon'])
-                        {!! $cat['icon'] !!}
+                    @if ($slid['slider_image'])
+                        {!! $slid['slider_image'] !!}
                     @endif
                 </div>
 
                 <div class="form-group row align-items-center">
                     <div class="col-2">
-                        <label for="icon">Category Icon</label>
+                        <label for="slider_image">Slider Image</label>
                     </div>
                     <div class="col">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="icon" name="icon">
-                            <label class="custom-file-label" for="icon">Choose file</label>
+                            <input type="file" class="custom-file-input" id="slider_image" name="slider_image">
+                            <label class="custom-file-label" for="slider_image">Choose file</label>
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center">
+                    <div class="col-2">
+                        <label for="slider_message">Slider Message</label>
+                    </div>
+                    <div class="col">
+                        <textarea name="slider_message" id="slider_message" class="form-control">{{ $slid['slider_message'] }}</textarea>
                     </div>
                 </div>
 
@@ -75,7 +84,7 @@
                         <label for="sort_order">Sort Order</label>
                     </div>
                     <div class="col-auto">
-                        <input type="number" name="sort_order" id="sort_order" class="form-control" value="{{ $cat['sort_order'] }}">
+                        <input type="number" name="sort_order" id="sort_order" class="form-control" value="{{ $slid['sort_order'] }}">
                     </div>
                 </div>
 
@@ -85,7 +94,7 @@
                     </div>
                     <div class="col">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="status" name="status" {{ $cat['status'] }}>
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" {{ $slid['status'] }}>
                             <label class="custom-control-label" for="status"></label>
                         </div>
                     </div>
@@ -93,7 +102,7 @@
 
                 <div class="row justify-content-center">
                     <div class="col-auto">
-                        <input type="submit" value="{{ $addText }} Category" class="btn btn-outline-primary">
+                        <input type="submit" value="{{ $addText }} Slider" class="btn btn-outline-primary">
                         <input type="reset" class="btn btn-outline-secondary">
                     </div>
                 </div>
@@ -104,7 +113,7 @@
 @section('internal-js')
     <script>
         $(document).ready(function () {
-            $('#icon').change(function(event) {
+            $('#slider_image').change(function(event) {
                 if($(this).val() == "") {
                     $("img#previewImg").fadeIn("fast").attr('src', "");
                     $("#previewDiv").hide();

@@ -1,6 +1,4 @@
 $(document).ready(function() {
-
-
     $.ajax({
         url: '',
         type: "GET",
@@ -95,6 +93,5 @@ function fillTable(action) {
         "columnDefs": [
             { "orderable": false, "targets": orderFalseIndex }
         ],
-        stateSave: true
     });
 }

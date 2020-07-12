@@ -27,3 +27,18 @@ $(document).ready(function() {
         });
     });
 });
+
+setTimeout(() => {
+    $(".alert .close").click();
+}, 6000);
+var index = 0;
+
+function successMessage(message) {
+    $(".card-body").prepend("<div class='alert alert-success alert-dismissible ajax' id='" + (index++) + "'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>Success!</strong> " + message + "</div>");
+    return index;
+}
+
+function failMessage(message) {
+    $(".card-body").prepend("<div class='alert alert-danger alert-dismissible ajax' id='" + (index++) + "'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>Error!</strong> " + message + "</div>");
+    return index;
+}

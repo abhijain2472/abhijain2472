@@ -1,27 +1,27 @@
 @extends('layout')
 
-@section('page-title', "List Categories")
-@section('page-heading', "List Categories")
-@section('page-description', "Here you can view/delete categories.")
+@section('page-title', "List Sliders")
+@section('page-heading', "List Sliders")
+@section('page-description', "Here you can view/delete sliders.")
 
-@section('active-main-category', 'active')
-@section('active-main-category-div', 'show')
-@section('active-main-category-list', 'active')
+@section('active-main-slider', 'active')
+@section('active-main-slider-div', 'show')
+@section('active-main-slider-list', 'active')
 
 @section('admin-card-header')
     <div class="row justify-content-between w-100 align-items-center">
         <div class="col-auto">
-            <span>All Categories</span>
+            <span>All Sliders</span>
         </div>
 
-        <div class="col-auto">
-            <button class="btn btn-success navigate" data-src="/add-category">Add Category</button>
+        <div class="col-auto p-0">
+            <button class="btn btn-success navigate" data-src="/add-slider">Add Slider</button>
         </div>
     </div>
 @endsection
 
 @section('admin-card-body')
-<input type="hidden" id="csrf" value="{{ csrf_token() }}">
+    <input type="hidden" id="csrf" value="{{ csrf_token() }}">
     @if (Session::get('success'))
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -40,8 +40,9 @@
             <thead>
                 <tr>
                     <th>Sr No.</th>
-                    <th>Category Name</th>
-                    <th data-sort="false">Image</th>
+                    <th data-sort="false">Slider Image</th>
+                    <th>Slider Tile</th>
+                    <th>Slider Message</th>
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Sort Order</th>
@@ -53,13 +54,12 @@
                 @php
                     $count = 1;
                 @endphp
-                @foreach ($categories as $key => $item)
+                @foreach ($sliders as $key => $item)
                     <tr>
                         <td>{{ $count++ }}</td>
-                        <td>{{ $item->name }}</td>
-                        <td>
-                            <img src="{{ $item->icon }}" alt="{{ $item->name }}" width="70" height="70">
-                        </td>
+                        <td>{!! $item->slider_image !!}</td>
+                        <td>{{ $item->slider_title }}</td>
+                        <td>{{ $item->slider_message }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->updated_at }}</td>
                         <td>{{ $item->sort_order }}</td>
@@ -73,15 +73,15 @@
                                 @endphp
                             @endif
                             <div class='custom-control custom-switch'>
-                                <input type='checkbox' class='custom-control-input ajax-status' id='status_{{ $item->category_id }}' value="on" {{ $checked }}>
-                                <label class='custom-control-label' for='status_{{ $item->category_id }}'></label>
+                                <input type='checkbox' class='custom-control-input ajax-status' id='status_{{ $item->slider_id }}' value="on" {{ $checked }}>
+                                <label class='custom-control-label' for='status_{{ $item->slider_id }}'></label>
                             </div>
                         </td>
                         <td>
-                            <a href='add-category/{{ $item->category_id }}' title='Edit Category'>
+                            <a href='add-slider/{{ $item->slider_id }}' title='Edit Slider'>
                                 <i class='far fa-edit'></i>
                             </a>
-                            <a href='javascript:return false;' onclick='getWarning({{ $item->category_id }})' data-toggle='modal' data-target='#deleteModal' class='text-danger' title='Delete Category'>
+                            <a href='javascript:return false;' onclick='getWarning({{ $item->slider_id }})' data-toggle='modal' data-target='#deleteModal' class='text-danger' title='Delete Slider'>
                                 <i class='far fa-trash-alt'></i>
                             </a>
                         </td>
@@ -100,8 +100,8 @@
                 <div class="modal-body">
                     <div class="loader text-center"></div>
                     <div class="content">
-                        <input type="hidden" id="delCategoryId">
-                        Are you sure to want to delete category <strong id="delCategoryName"></strong> ?
+                        <input type="hidden" id="delSliderId">
+                        Are you sure to want to delete slider <strong id="delSliderName"></strong> ?
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -117,7 +117,7 @@
 <script>
     function getWarning(id) {
         $.ajax({
-            url: '/get-category/'+id,
+            url: '/get-slider/'+id,
             type: 'GET',
             beforeSend: function() {
                 $(".loader").html('<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>');
@@ -125,8 +125,8 @@
             },
             success: function(data) {
                 data = JSON.parse(data);
-                $("#delCategoryId").val(data['category_id']);
-                $("#delCategoryName").text(data['name']);
+                $("#delSliderId").val(data['slider_id']);
+                $("#delSliderName").text(data['slider_title']);
             },
             complete: function () {
                 $(".loader").html('');
@@ -137,7 +137,7 @@
 
     $(document).ready(function() {
         $("#deleteButton").click(function() {
-            window.location.href = "/delete-category/"+$("#delCategoryId").val()
+            window.location.href = "/delete-slider/"+$("#delSliderId").val()
         });
 
         $(document).on("change", ".ajax-status", function() {
@@ -145,7 +145,7 @@
             var id = $(this).attr("id").split("_")[1]
             status = (status) ? "1" : "0";
             $.ajax({
-                url: '/category/change-status/'+id,
+                url: '/slider/change-status/'+id,
                 type: 'POST',
                 data: {status: status, _token: $("#csrf").val()},
                 beforeSend: function() {

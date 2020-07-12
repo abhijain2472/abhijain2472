@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\APi;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
-use App\Models\Category;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class CategoryController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::all()->sortBy('sort_order'));
+        //
     }
 
     /**
@@ -83,5 +84,26 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function register(Request $request) {
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        if($user->save()) {
+            if(Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+                return response(['result' => true, 'user' => Auth::user()]);
+            }
+        }
+        return response(['result' => false, 'user' => new User()]);
+    }
+
+    public function login(Request $request) {
+        if(Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+            return response(['result' => true, 'user' => Auth::user()]);
+        } else {
+            return response(['result' => false, 'user' => new User()]);
+        }
     }
 }
