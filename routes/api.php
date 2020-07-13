@@ -21,4 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('categories', 'Api\CategoryController@index');
 Route::get('register', 'Api\UserController@register');
 Route::get('login', 'Api\UserController@login');
-Route::get('shipping', 'Api\UserController@store');
+Route::get('shipping', 'Api\ShippingController@store');

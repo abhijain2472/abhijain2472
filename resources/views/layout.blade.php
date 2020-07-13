@@ -1,6 +1,17 @@
+@php
+    $adminobj = "";
+@endphp
+@if (Session::get('admin_login'))
+    @php
+        $adminobj = \App\Http\Controllers\AdminController::getLoginAdminStatic();
+    @endphp
+@endif
+
+@if($adminobj == "")
+    <script>window.location = "/";</script>
+@endif
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,7 +65,7 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item @yield('active-main-category')">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fab fa-bitbucket"></i>
                     <span>Category</span>
                 </a>
                 <div id="collapseTwo" class="collapse @yield('active-main-category-div')" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -69,7 +80,7 @@
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item @yield('active-main-product')">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-shopping-bag"></i>
                     <span>Product</span>
                 </a>
                 <div id="collapseUtilities" class="collapse @yield('active-main-product-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -81,11 +92,11 @@
             </li>
 
             <li class="nav-item @yield('active-main-slider')">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#slider" aria-expanded="true" aria-controls="slider">
+                    <i class="fas fa-sliders-h"></i>
                     <span>Slider</span>
                 </a>
-                <div id="collapseUtilities" class="collapse @yield('active-main-slider-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="slider" class="collapse @yield('active-main-slider-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item @yield('active-main-slider-add')" href="{{URL::to('add-slider')}}">Add Slider</a>
                         <a class="collapse-item @yield('active-main-slider-list')" href="{{URL::to('slider-list')}}">Sliders</a>
@@ -264,7 +275,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                    {{-- {{ ($adminobj) ? $adminobj->username : '' }} --}}
+                                    {{ ($adminobj) ? $adminobj->username : '' }}
                                 </span>
                                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                             </a>
@@ -380,6 +391,7 @@
     <script src="{{DIR_HTTP_JS}}script.js"></script>
     <script src="{{DIR_HTTP_JS}}import.js"></script>
     <script src="{{DIR_HTTP_JS}}blog-table.js"></script>
+    <script src="{{DIR_HTTP_JS}}validation.js"></script>
 
     <!-- Page level custom scripts -->
     {{-- <script src="{{DIR_HTTP_JS}}demo/datatables-demo.js"></script> --}}

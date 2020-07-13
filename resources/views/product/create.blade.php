@@ -41,7 +41,7 @@
         <div class="col-12">
             <form action="/post-form-product/{{ $prod['product_id'] }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group row align-items-center">
+                <div class="form-group row align-items-center validate" data-validation="required" validation-msg="Product name is required.">
                     <div class="col-2">
                         <label for="product_name">Product Name</label>
                     </div>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row align-items-center">
+                <div class="form-group row align-items-center validate" data-validation="required" validation-msg="Product price is required.">
                     <div class="col-2">
                         <label for="product_price">Product Price</label>
                     </div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row align-items-center">
+                <div class="form-group row align-items-center validate" data-validation="required" validation-msg="Product details is required.">
                     <div class="col-2">
                         <label for="product_details">Product Details</label>
                     </div>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row align-items-center">
+                <div class="form-group row align-items-center validate" data-validation="required" validation-msg="Please select category.">
                     <div class="col-2">
                         <label for="product_category_id">Product Category</label>
                     </div>

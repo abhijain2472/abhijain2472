@@ -42,7 +42,7 @@
         <div class="col-12">
             <form action="/post-form-slider/{{ $slid['slider_id'] }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group row align-items-center">
+                <div class="form-group row align-items-center validate" data-validation="required" validation-msg="Slider title is required.">
                     <div class="col-2">
                         <label for="slider_title">Slider Title</label>
                     </div>

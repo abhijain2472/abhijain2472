@@ -71,3 +71,7 @@ a:hover {
     transform: translate(-50%);
     z-index: 1500;
 }
+
+.form-group p {
+    margin: 0;
+}
