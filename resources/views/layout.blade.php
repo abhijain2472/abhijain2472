@@ -6,9 +6,14 @@
         $adminobj = \App\Http\Controllers\AdminController::getLoginAdminStatic();
     @endphp
 @endif
-
+@php
+    $backlink = urlencode(DIR_HTTP_CURRENT_PAGE);
+@endphp
 @if($adminobj == "")
-    <script>window.location = "/";</script>
+    <script>
+        var backlink = "{{ $backlink }}";
+        window.location = "/?redirecturl="+backlink;
+    </script>
 @endif
 <!DOCTYPE html>
 <html lang="en">
@@ -100,6 +105,19 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item @yield('active-main-slider-add')" href="{{URL::to('add-slider')}}">Add Slider</a>
                         <a class="collapse-item @yield('active-main-slider-list')" href="{{URL::to('slider-list')}}">Sliders</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item @yield('active-main-customer')">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#users" aria-expanded="true" aria-controls="users">
+                    <i class="fas fa-users"></i>
+                    <span>Website Customer</span>
+                </a>
+                <div id="users" class="collapse @yield('active-main-customer-div')" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item @yield('active-main-customer-add')" href="{{URL::to('add-customer')}}">Add Customer</a>
+                        <a class="collapse-item @yield('active-main-customer-list')" href="{{URL::to('customer-list')}}">Customers</a>
                     </div>
                 </div>
             </li>

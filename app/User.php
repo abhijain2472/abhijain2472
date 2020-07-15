@@ -36,4 +36,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getTableColumns() {
+        $columnKeys = $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+        $columnKeys = array_flip($columnKeys);
+        foreach ($columnKeys as $key => $value) {
+            $columnKeys[$key] = "";
+        }
+        return $columnKeys;
+    }
 }

@@ -93,6 +93,7 @@ class AdminController extends Controller
     }
 
     public function loginAuth(Request $request) {
+        $redirect = $request->input('redirecturl');
         $admin = Admin::where("username", "=", $request->input('username'))
         ->where("password", "=", $request->input('password'))->get();
         if(count($admin) > 0) {
@@ -106,6 +107,9 @@ class AdminController extends Controller
             } else {
                 Cookie::queue('admin_username', '');
                 Cookie::queue('admin_password', '');
+            }
+            if($redirect) {
+                return redirect($redirect);
             }
             return redirect('/dashboard');
         }

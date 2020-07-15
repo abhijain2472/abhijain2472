@@ -44,3 +44,12 @@ Route::get('/slider-list', "SliderController@index");
 Route::get('/get-slider/{id}', "SliderController@getSlider");
 Route::get('/delete-slider/{id}', "SliderController@deleteSlider");
 Route::post('/slider/change-status/{id}', "SliderController@changeStatus");
+
+Route::get('/add-customer', "UserController@create");
+Route::get('/add-customer/{id}', "UserController@edit");
+Route::post('/post-form-customer', "UserController@store");
+Route::post('/post-form-customer/{id}', "UserController@update");
+Route::get('/customer-list', "UserController@index");
+Route::get('/get-customer/{id}', "UserController@getProduct");
+Route::get('/delete-customer/{id}', "UserController@deleteProduct");
+Route::post('/customer/change-status/{id}', "UserController@changeStatus");

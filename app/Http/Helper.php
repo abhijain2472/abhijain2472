@@ -3,6 +3,7 @@
 namespace App\Http;
 
 if ($_SERVER['HTTP_HOST'] == "localhost:8000") {
+    define('DIR_HTTP_CURRENT_PAGE', "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     define('DIR_HTTP_HOME', "http://" . $_SERVER['HTTP_HOST'] . "/");
     define('DIR_WS_HOME', $_SERVER['DOCUMENT_ROOT']."\\");
 
