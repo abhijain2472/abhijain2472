@@ -46,7 +46,7 @@ class ProductController extends Controller
         foreach ($prod as $key => $value) {
             $prod[$key] = "";
         }
-        $prod['is_new_arriaval'] = "checked";
+        $prod['is_new_arrival'] = "checked";
         $prod['product_image'] = draw_noimage(220, 150);
         $prod['status'] = "checked";
         $catrgories = Category::all()->sortBy('sort_order');
@@ -67,7 +67,7 @@ class ProductController extends Controller
         $product_price = $request->input('product_price');
         $product_category_id = $request->input('product_category_id');
         $is_hot_product = $request->input('is_hot_product');
-        $is_new_arriaval = $request->input('is_new_arriaval');
+        $is_new_arrival = $request->input('is_new_arrival');
         $product_details = $request->input('product_details');
 
         $prdduct = new Product();
@@ -76,7 +76,7 @@ class ProductController extends Controller
         $prdduct->discount = $discount;
         $prdduct->product_details = $product_details;
         $prdduct->is_hot_product = (isset($is_hot_product)) ? "1" : "0";
-        $prdduct->is_new_arriaval = (isset($is_new_arriaval)) ? "1" : "0";
+        $prdduct->is_new_arrival = (isset($is_new_arrival)) ? "1" : "0";
         $prdduct->product_category_id = $product_category_id;
         $prdduct->user_id = 0;
         $prdduct->status = (isset($status)) ? "1" : "0";
@@ -135,7 +135,7 @@ class ProductController extends Controller
         }
         $product['status'] = ($product['status'] == "1") ? "checked" : "";
         $product['is_hot_product'] = ($product['is_hot_product'] == "1") ? "checked" : "";
-        $product['is_new_arriaval'] = ($product['is_new_arriaval'] == "1") ? "checked" : "";
+        $product['is_new_arrival'] = ($product['is_new_arrival'] == "1") ? "checked" : "";
         $addText = "Update";
         $description = "Here you can edit products.";
         $catrgories = Category::all()->sortBy('sort_order');
@@ -157,7 +157,7 @@ class ProductController extends Controller
         $product_price = $request->input('product_price');
         $product_category_id = $request->input('product_category_id');
         $is_hot_product = $request->input('is_hot_product');
-        $is_new_arriaval = $request->input('is_new_arriaval');
+        $is_new_arrival = $request->input('is_new_arrival');
         $product_details = $request->input('product_details');
 
         $prdduct = Product::find($id);
@@ -166,7 +166,7 @@ class ProductController extends Controller
         $prdduct->discount = $discount;
         $prdduct->product_details = $product_details;
         $prdduct->is_hot_product = (isset($is_hot_product)) ? "1" : "0";
-        $prdduct->is_new_arriaval = (isset($is_new_arriaval)) ? "1" : "0";
+        $prdduct->is_new_arrival = (isset($is_new_arrival)) ? "1" : "0";
         $prdduct->product_category_id = $product_category_id;
         $prdduct->user_id = 0;
         $prdduct->status = (isset($status)) ? "1" : "0";
@@ -235,5 +235,80 @@ class ProductController extends Controller
             echo "success";
         }
         exit;
+    }
+
+    public function importPage(Request $request) {
+        $addText = "Import";
+        $description = "Here you can import products directly";
+        $categories = Category::all()->sortBy('sort_order');
+        return view('product.import', compact('addText', 'description', 'categories'));
+    }
+
+    public function importSave(Request $request) {
+        $data = $request->session()->get('record_add');
+        $file = pathinfo(array_pop($data), PATHINFO_DIRNAME);
+        $dataCount = count($data);
+        $count = 0;
+        foreach ($data as $key => $value) {
+            $product = new Product();
+            $product->product_name = $value['product_name'];
+            $product->product_price = $value['product_price'];
+            $product->discount = $value['discount'];
+            $product->product_details = $value['product_details'];
+            $product->is_hot_product = $value['is_hot_product'];
+            $product->is_new_arrival = $value['is_new_arrival'];
+            $product->product_category_id = $value['product_category_id'];
+            $product->user_id = $value['user_id'];
+            $product->status = $value['status'];
+            $image = $value['product_image'];
+            if($product->save()) {
+                if(!empty($image)) {
+                    $ext = pathinfo($image, PATHINFO_EXTENSION);
+                    if($ext == "png" || $ext == "jpeg" || $ext == "jpg" || $ext == "bmp") {
+                        $destination = DIR_WS_PRODUCT_IMAGES.$product->product_id."\\";
+                        $filename = date('Y_m_d_h_i_s') . "." . $ext;
+                        if(!file_exists($destination)) {
+                            mkdir($destination, 0777, true);
+                        }
+                        if(copy($file."\\".$image, $destination.$filename) == TRUE) {
+                            $product = Product::find($product->product_id);
+                            $product->product_image = $filename;
+                            $product->save();
+                        }
+                    }
+                }
+                $count++;
+            }
+        }
+        if($count > 0 && $count == $dataCount) {
+            $request->session()->flash('success', 'Data is added successfully.');
+            $this->delete_directory($file);
+            unlink($file.".zip");
+        } elseif ($count < $dataCount) {
+            $request->session()->flash('fail', 'Some of the data is missing.');
+        } elseif($count == 0) {
+            $request->session()->flash('fail', 'Failed to store data.');
+        }
+        $request->session()->forget('record_add');
+        echo 'done';
+        exit;
+    }
+
+    function delete_directory($dirname) {
+        if (is_dir($dirname))
+          $dir_handle = opendir($dirname);
+        if (!$dir_handle)
+            return false;
+        while($file = readdir($dir_handle)) {
+            if ($file != "." && $file != "..") {
+                if (!is_dir($dirname."/".$file))
+                    unlink($dirname."/".$file);
+                else
+                    $this->delete_directory($dirname.'/'.$file);
+            }
+        }
+        closedir($dir_handle);
+        rmdir($dirname);
+        return true;
     }
 }

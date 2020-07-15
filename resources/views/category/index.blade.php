@@ -14,7 +14,7 @@
             <span>All Categories</span>
         </div>
 
-        <div class="col-auto">
+        <div class="col-auto p-0">
             <button class="btn btn-success navigate" data-src="/add-category">Add Category</button>
         </div>
     </div>

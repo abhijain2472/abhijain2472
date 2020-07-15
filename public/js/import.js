@@ -67,7 +67,7 @@ $(document).ready(function() {
     $(".ajax-save").click(function() {
         var button = $(this);
         $.ajax({
-            url: "/upload-csv-action",
+            url: "/upload-csv-action/" + button.attr('id'),
             type: 'POST',
             data: { '_token': $("#csrfToken").val() },
             beforeSend: function() {
@@ -75,7 +75,7 @@ $(document).ready(function() {
             },
             success: function(data) {
                 if (data == "done") {
-                    window.location.href = '/blog-post-list';
+                    window.location.href = button.attr('redirect');
                 }
             },
             complete: function() {

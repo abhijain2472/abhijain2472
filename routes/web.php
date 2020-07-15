@@ -35,6 +35,7 @@ Route::get('/product-list', "ProductController@index");
 Route::get('/get-product/{id}', "ProductController@getProduct");
 Route::get('/delete-product/{id}', "ProductController@deleteProduct");
 Route::post('/product/change-status/{id}', "ProductController@changeStatus");
+Route::get('/import-product', "ProductController@importPage");
 
 Route::get('/add-slider', "SliderController@create");
 Route::get('/add-slider/{id}', "SliderController@edit");
@@ -53,3 +54,7 @@ Route::get('/customer-list', "UserController@index");
 Route::get('/get-customer/{id}', "UserController@getProduct");
 Route::get('/delete-customer/{id}', "UserController@deleteProduct");
 Route::post('/customer/change-status/{id}', "UserController@changeStatus");
+
+Route::post('/csv-download/{file}', "DownloadController@download");
+Route::post('/upload-csv', 'ImportController@upload');
+Route::post('/upload-csv-action/add-product', 'ProductController@importSave');

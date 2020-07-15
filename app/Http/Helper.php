@@ -22,6 +22,13 @@ if ($_SERVER['HTTP_HOST'] == "localhost:8000") {
 
     define('DIR_HTTP_SLIDER_IMAGES', DIR_HTTP_IMAGES . "slider/");
     define('DIR_WS_SLIDER_IMAGES', DIR_WS_IMAGES. "slider\\");
+
+    define('DIR_HTTP_CSV', DIR_HTTP_IMAGES . "sample/");
+    define('DIR_WS_CSV', DIR_WS_IMAGES. "sample\\");
+
+    define('DIR_HTTP_UPLOAD', DIR_HTTP_IMAGES . "csv/");
+    define('DIR_WS_UPLOAD', DIR_WS_IMAGES. "csv\\");
+
 }
 
 function draw_image($path, $width = 100, $height = 100) {

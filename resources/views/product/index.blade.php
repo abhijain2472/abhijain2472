@@ -14,8 +14,9 @@
             <span>All Products</span>
         </div>
 
-        <div class="col-auto">
+        <div class="col-auto p-0">
             <button class="btn btn-success navigate" data-src="/add-product">Add Product</button>
+            <button class="btn btn-secondary navigate" data-src="/import-product">Import Product</button>
         </div>
     </div>
 @endsection

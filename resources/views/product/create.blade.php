@@ -136,8 +136,8 @@
                     </div>
                     <div class="col">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="is_new_arriaval" name="is_new_arriaval" {{ $prod['is_new_arriaval'] }}>
-                            <label class="custom-control-label" for="is_new_arriaval"></label>
+                            <input type="checkbox" class="custom-control-input" id="is_new_arrival" name="is_new_arrival" {{ $prod['is_new_arrival'] }}>
+                            <label class="custom-control-label" for="is_new_arrival"></label>
                         </div>
                     </div>
                 </div>

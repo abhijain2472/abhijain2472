@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('product_image');
             $table->double('discount');
             $table->boolean('is_hot_product');
-            $table->boolean('is_new_arriaval');
+            $table->boolean('is_new_arrival');
             $table->integer('product_category_id');
             $table->integer('user_id');
             $table->enum('status', array("0", "1"));
