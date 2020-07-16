@@ -6,9 +6,13 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 use function App\Http\draw_image;
 use function App\Http\draw_noimage;
+use function App\Http\getDateFormat;
 use function App\Http\objectToArray;
 
 class ProductController extends Controller
@@ -20,15 +24,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category'])->join('categories', 'categories.category_id', '=', 'products.product_category_id')->orderBy('categories.sort_order')->get(['products.*']);
-        foreach ($products as $key => $value) {
-            if($value['product_image']) {
-                $products[$key]['product_image'] = draw_image(DIR_HTTP_PRODUCT_IMAGES.$value->product_id."/".$value->product_image, 80, 70);
-            } else {
-                $products[$key]['product_image'] = draw_noimage(80, 70);
-            }
-        }
-        return view('product.index', compact('products'));
+        // $products = Product::with(['category'])->join('categories', 'categories.category_id', '=', 'products.product_category_id')->orderBy('categories.sort_order')->get(['products.*']);
+        // foreach ($products as $key => $value) {
+        //     if($value['product_image']) {
+        //         $products[$key]['product_image'] = draw_image(DIR_HTTP_PRODUCT_IMAGES.$value->product_id."/".$value->product_image, 80, 70);
+        //     } else {
+        //         $products[$key]['product_image'] = draw_noimage(80, 70);
+        //     }
+        // }
+        return view('product.index', /**compact('products') */);
     }
 
     /**
@@ -91,7 +95,19 @@ class ProductController extends Controller
                     if(!file_exists($destination)) {
                         mkdir($destination, 0777, true);
                     }
-                    if($product_image->move($destination, $filename)) {
+                    $imageAdded = false;
+                    if($request->cookie('cropped_image_upload')) {
+                        if(copy($request->cookie('cropped_image_upload'), $destination."\\".$filename)) {
+                            unlink($request->cookie('cropped_image_upload'));
+                            $imageAdded = true;
+                        }
+
+                    } else {
+                        if($product_image->move($destination, $filename)) {
+                            $imageAdded = true;
+                        }
+                    }
+                    if($imageAdded == TRUE) {
                         $prdduct = Product::find($prdduct->product_id);
                         $prdduct->product_image = $filename;
                         $prdduct->save();
@@ -310,5 +326,67 @@ class ProductController extends Controller
         closedir($dir_handle);
         rmdir($dirname);
         return true;
+    }
+
+    public function getproductList(Request $request) {
+        $columnlist = array('products.product_id', 'products.product_name', 'products.product_image', 'products.product_category_id', 'products.product_price', 'products.discount', 'products.created_at', 'products.updated_at', 'products.status');
+        $start = $request->input('start');
+        $length = $request->input('length');
+        $order = $request->input('order')[0];
+        $products = Product::all();
+        $totalRec = count($products);
+        $products = DB::table('products')
+        ->join('categories', 'categories.category_id', '=', 'products.product_category_id')
+        ->orderBy('categories.sort_order')
+        ->select([DB::raw('FOUND_ROWS() as row_count'), 'products.*', 'categories.name', DB::raw('IF(discount > 0, discount, 0) as discount')]);
+        if($start > 0 && $length != "") {
+            $products->offset($start)->limit($length);
+        } else {
+            $products->limit($length);
+        }
+        if(!empty($order)) {
+            $products->orderBy($columnlist[$order['column']], $order['dir']);
+        }
+        $products = $products->get();
+        $filterRec = count($products);
+        $htmlArray = array();
+        foreach ($products as $key => $value) {
+            $rec = array();
+            $rec[] = $key+1;
+            $rec[] = $value->product_name;
+            $image = $value->product_image;
+            $path = DIR_WS_PRODUCT_IMAGES.$value->product_id."\\".$image;
+            if($image != null && file_exists($path)) {
+                $path = DIR_HTTP_PRODUCT_IMAGES.$value->product_id."/".$image;
+                $rec[] = draw_image($path,80,70);
+            } else {
+                $rec[] = draw_noimage(80,70);
+            }
+            $rec[] = $value->name;
+            $rec[] = $value->product_price;
+            $rec[] = $value->discount;
+            $rec[] = getDateFormat($value->created_at);
+            $rec[] = getDateFormat($value->updated_at);
+            $checked = '';
+            if($value->status) {
+                $checked = 'checked';
+            }
+            $rec[] = "<div class='custom-control custom-switch'>
+            <input type='checkbox' class='custom-control-input ajax-status' id='status_{$value->product_id}' value='on' {$checked}> <label class='custom-control-label' for='status_{$value->product_id}'></label>
+        </div>";
+            $rec[] = "<a href='/add-product/{$value->product_id}' title='Edit Product'>
+            <i class='far fa-edit'></i>
+        </a>
+        <a href='javascript:return false;' onclick='getWarning({$value->product_id})' data-toggle='modal' data-target='#deleteModal' class='text-danger' title='Delete Product'>
+            <i class='far fa-trash-alt'></i>
+        </a>";
+            $htmlArray[] = $rec;
+        }
+        return array(
+            'draw'=>$request->input('draw'),
+            'recordsTotal'=>$totalRec,
+            'recordsFiltered'=>$totalRec,
+            'data'=>$htmlArray
+        );
     }
 }

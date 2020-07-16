@@ -85,7 +85,7 @@ function fillTable(action) {
         "ajax": {
             "url": form,
             "type": "POST",
-            "data": { data: data, _token: $("#csrfToken").val() }
+            "data": { data: data, _token: $("#csrf").val() }
         }
     });
 

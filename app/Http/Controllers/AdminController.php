@@ -16,13 +16,14 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $postdata = array();
         if (Cookie::get('admin_username') && Cookie::get('admin_password')) {
             $postdata['username'] = Cookie::get('admin_username');
             $postdata['password'] = Cookie::get('admin_password');
         }
+        $postdata['redirecturl'] = $request->input('redirecturl');
         return view('login', compact('postdata'));
     }
 

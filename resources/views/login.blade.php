@@ -15,12 +15,15 @@
 </head>
 @php
     $username = $password = $rememberme = "";
-    if(!empty($postdata)) {
+    if(!empty($postdata['username'])) {
         $username = $postdata['username'];
         $password = $postdata['password'];
         $rememberme = "checked";
     }
-    $_GET['redirecturl'] = "";
+    $redirecturl = "";
+    if(isset($postdata['redirecturl'])) {
+        $redirecturl = $postdata['redirecturl'];
+    }
 @endphp
 <body class="bg-gradient-primary">
     <div class="container">
@@ -38,7 +41,7 @@
                                     </div>
                                     <form class="user" method="POST" action="/admin-login">
                                         @csrf
-                                        <input type="text" name="redirecturl" value="{{ $_GET['redirecturl'] }}" class="d-none">
+                                        <input type="text" name="redirecturl" value="{{ $redirecturl }}" class="d-none">
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Username" value="{{ $username }}">
                                         </div>

@@ -22,7 +22,7 @@
 @endsection
 
 @section('admin-card-body')
-<input type="hidden" id="csrf" value="{{ csrf_token() }}">
+    <input type="hidden" id="csrf" value="{{ csrf_token() }}">
     @if (Session::get('success'))
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -37,7 +37,7 @@
         </div>
     @endif
     <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable">
+        <table class="table table-bordered ajax" data-load="/get-products-list-ajax" id="dataTable">
             <thead>
                 <tr>
                     <th>Sr No.</th>
@@ -52,7 +52,7 @@
                     <th data-sort="false"></th>
                 </tr>
             </thead>
-            <tbody>
+            {{-- <tbody>
                 @php
                     $count = 1;
                 @endphp
@@ -90,7 +90,7 @@
                         </td>
                     </tr>
                 @endforeach
-            </tbody>
+            </tbody> --}}
         </table>
     </div>
     <div class="modal fade" id="deleteModal">

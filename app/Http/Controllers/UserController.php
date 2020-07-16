@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 
+use function App\Http\draw_noimage;
+
 class UserController extends Controller
 {
     /**
@@ -22,12 +24,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         $addText = "Add";
         $description = "Here you can add customers";
         $user = new User();
         $cust = $user->getTableColumns();
+        $cust['image'] = draw_noimage(220,150);
         return view('user.create', compact('addText', 'description', 'cust', 'user'));
     }
 
