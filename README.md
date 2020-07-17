@@ -10,5 +10,5 @@ Here are some ideas to get you started:
 - 💬 Ask me about Fluuter, Firebase & Dialogflow.
 - 📫 How to reach me: ...
 - 😄 Pronouns: He/His
-- ⚡ Fun fact: ...
+
 
