@@ -39,6 +39,19 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
+                                    @if (Session::get('success'))
+                                        <div class="alert alert-success alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Success!</strong> {{Session::get('success')}}
+                                        </div>
+                                    @endif
+
+                                    @if (Session::get('fail'))
+                                        <div class="alert alert-danger alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            <strong>Error!</strong> {{Session::get('fail')}}
+                                        </div>
+                                    @endif
                                     <form class="user" method="POST" action="/admin-login">
                                         @csrf
                                         <input type="text" name="redirecturl" value="{{ $redirecturl }}" class="d-none">

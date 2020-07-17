@@ -141,8 +141,7 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $name = $request->input('name');
         $sort_order = $request->input('sort_order');
         $status = $request->input('status');

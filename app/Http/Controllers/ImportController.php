@@ -41,7 +41,7 @@ class ImportController extends Controller
                     if ($res === TRUE) {
                         $destination = DIR_WS_UPLOAD.pathinfo(DIR_WS_UPLOAD.$fileName, PATHINFO_FILENAME);
                         if(file_exists($destination)) {
-                            $this->delete_directory($destination);
+                            delete_directory($destination);
                         }
                         if(!file_exists($destination)) {
                             mkdir($destination, 0777, true);
@@ -172,23 +172,5 @@ class ImportController extends Controller
             fclose($handle);
         }
         return $data;
-    }
-
-    function delete_directory($dirname) {
-        if (is_dir($dirname))
-          $dir_handle = opendir($dirname);
-        if (!$dir_handle)
-            return false;
-        while($file = readdir($dir_handle)) {
-            if ($file != "." && $file != "..") {
-                if (!is_dir($dirname."/".$file))
-                    unlink($dirname."/".$file);
-                else
-                    $this->delete_directory($dirname.'/'.$file);
-            }
-        }
-        closedir($dir_handle);
-        rmdir($dirname);
-        return true;
     }
 }

@@ -52,9 +52,10 @@ Route::get('/add-customer/{id}', "UserController@edit");
 Route::post('/post-form-customer', "UserController@store");
 Route::post('/post-form-customer/{id}', "UserController@update");
 Route::get('/customer-list', "UserController@index");
-Route::get('/get-customer/{id}', "UserController@getProduct");
-Route::get('/delete-customer/{id}', "UserController@deleteProduct");
+Route::get('/get-customer/{id}', "UserController@getCustomer");
+Route::get('/delete-customer/{id}', "UserController@destroy");
 Route::post('/customer/change-status/{id}', "UserController@changeStatus");
+Route::post('/get-customer-list-ajax', "UserController@getUserList");
 
 Route::post('/csv-download/{file}', "DownloadController@download");
 Route::post('/upload-crop-image', "DownloadController@uploadcrop");

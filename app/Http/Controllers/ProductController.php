@@ -116,10 +116,10 @@ class ProductController extends Controller
                     return redirect('add-product/'.$prdduct->product_id)->with('success', 'Only PNG/JPEG/JPG/BMP is allowed.');
                 }
             }
+            return redirect('add-product/'.$prdduct->product_id)->with('success', 'Product is added successfully.');
         } else {
             return redirect()->back()->with('fail', 'Error adding product.');
         }
-        return redirect('add-product/'.$prdduct->product_id)->with('success', 'Product is added successfully.');
     }
 
     /**
@@ -298,7 +298,7 @@ class ProductController extends Controller
         }
         if($count > 0 && $count == $dataCount) {
             $request->session()->flash('success', 'Data is added successfully.');
-            $this->delete_directory($file);
+            delete_directory($file);
             unlink($file.".zip");
         } elseif ($count < $dataCount) {
             $request->session()->flash('fail', 'Some of the data is missing.');
@@ -310,24 +310,6 @@ class ProductController extends Controller
         exit;
     }
 
-    function delete_directory($dirname) {
-        if (is_dir($dirname))
-          $dir_handle = opendir($dirname);
-        if (!$dir_handle)
-            return false;
-        while($file = readdir($dir_handle)) {
-            if ($file != "." && $file != "..") {
-                if (!is_dir($dirname."/".$file))
-                    unlink($dirname."/".$file);
-                else
-                    $this->delete_directory($dirname.'/'.$file);
-            }
-        }
-        closedir($dir_handle);
-        rmdir($dirname);
-        return true;
-    }
-
     public function getproductList(Request $request) {
         $columnlist = array('products.product_id', 'products.product_name', 'products.product_image', 'products.product_category_id', 'products.product_price', 'products.discount', 'products.created_at', 'products.updated_at', 'products.status');
         $start = $request->input('start');
@@ -337,7 +319,6 @@ class ProductController extends Controller
         $totalRec = count($products);
         $products = DB::table('products')
         ->join('categories', 'categories.category_id', '=', 'products.product_category_id')
-        ->orderBy('categories.sort_order')
         ->select([DB::raw('FOUND_ROWS() as row_count'), 'products.*', 'categories.name', DB::raw('IF(discount > 0, discount, 0) as discount')]);
         if($start > 0 && $length != "") {
             $products->offset($start)->limit($length);

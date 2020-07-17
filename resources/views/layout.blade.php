@@ -33,6 +33,7 @@
 </head>
 
 <body id="page-top">
+    <input type="hidden" id="csrf" value="{{ csrf_token() }}">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->

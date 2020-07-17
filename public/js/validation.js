@@ -132,12 +132,9 @@ $(function() {
             }
 
             if (validation_data[i][1] === "required_password") {
-                var regex = /^[0-9]{10}$/;
+                // var regex = /^[0-9]{10}$/;
                 if (input.val() == "") {
                     $(input).parent().append("<p class='text-danger'>" + validation_data[i][2][0] + "</p>");
-                    validate = false;
-                } else if (!regex.test(input.val())) {
-                    $(input).parent().append("<p class='text-danger'>" + validation_data[i][2][1] + "</p>");
                     validate = false;
                 } else {
                     if (input.attr("data-min-length") != "" && input.attr("data-max-length") != "") {
@@ -165,6 +162,11 @@ $(function() {
                     }
                 } else {
                     if (validation_data[i][4] == $(element).val()) {
+                        if (input.val() == "") {
+                            $(input).parent().append("<p class='text-danger'>" + validation_data[i][2][0] + "</p>");
+                            validate = false;
+                        }
+                    } else if (validation_data[i][4] == "*" && $(element).val() == "") {
                         if (input.val() == "") {
                             $(input).parent().append("<p class='text-danger'>" + validation_data[i][2][0] + "</p>");
                             validate = false;

@@ -23,6 +23,7 @@ class DownloadController extends Controller
     }
 
     public function uploadcrop(Request $request) {
+        $imagesArray = $request->session()->get('image_array');
         $image = $request->input('image');
         $image = explode(";", $image);
         $image = explode(',', $image[1]);
@@ -30,6 +31,8 @@ class DownloadController extends Controller
         $filename = date('Y_m_d_h_i_s') . ".png";
         file_put_contents(DIR_WS_TEMPIMAGES.$filename, $imgData);
         $respose = new Response(DIR_HTTP_TEMPIMAGES.$filename);
+        $imagesArray[] = DIR_WS_TEMPIMAGES.$filename;
+        $request->session()->put('image_array', $imagesArray);
         $respose->withCookie(cookie('cropped_image_upload', DIR_WS_TEMPIMAGES.$filename, 10));
         return $respose;
         exit;

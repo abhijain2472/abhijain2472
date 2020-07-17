@@ -24,7 +24,6 @@
 @endsection
 
 @section('admin-card-body')
-    <input type="hidden" id="csrf" value="{{ csrf_token() }}">
     @if (Session::get('success'))
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>

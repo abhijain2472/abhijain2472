@@ -31,6 +31,9 @@ if ($_SERVER['HTTP_HOST'] == "localhost:8000") {
 
     define('DIR_HTTP_TEMPIMAGES', DIR_HTTP_IMAGES . "tempimages/");
     define('DIR_WS_TEMPIMAGES', DIR_WS_IMAGES. "tempimages\\");
+
+    define('DIR_HTTP_USER_IMAGES', DIR_HTTP_IMAGES . "user/");
+    define('DIR_WS_USER_IMAGES', DIR_WS_IMAGES. "user\\");
 } else {
     define('DIR_HTTP_CURRENT_PAGE', "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     define('DIR_HTTP_HOME', "http://" . $_SERVER['HTTP_HOST'] . "/public/");
@@ -91,4 +94,22 @@ function getDateFormat($date, $time = true) {
         return date('m/d/Y h:i A', strtotime($date));
     }
     return date('M/d/y', strtotime($date));
+}
+
+function delete_directory($dirname) {
+    if (is_dir($dirname))
+      $dir_handle = opendir($dirname);
+    if (!$dir_handle)
+        return false;
+    while($file = readdir($dir_handle)) {
+        if ($file != "." && $file != "..") {
+            if (!is_dir($dirname."/".$file))
+                unlink($dirname."/".$file);
+            else
+                delete_directory($dirname.'/'.$file);
+        }
+    }
+    closedir($dir_handle);
+    rmdir($dirname);
+    return true;
 }

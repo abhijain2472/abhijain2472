@@ -16,8 +16,7 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $postdata = array();
         if (Cookie::get('admin_username') && Cookie::get('admin_password')) {
             $postdata['username'] = Cookie::get('admin_username');

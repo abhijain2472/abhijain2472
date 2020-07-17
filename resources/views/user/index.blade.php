@@ -1,21 +1,21 @@
 @extends('layout')
 
-@section('page-title', "List Categories")
-@section('page-heading', "List Categories")
-@section('page-description', "Here you can view/delete categories.")
+@section('page-title', "List Customers")
+@section('page-heading', "List Customers")
+@section('page-description', "Here you can view/delete customers.")
 
-@section('active-main-category', 'active')
-@section('active-main-category-div', 'show')
-@section('active-main-category-list', 'active')
+@section('active-main-customer', 'active')
+@section('active-main-customer-div', 'show')
+@section('active-main-customer-list', 'active')
 
 @section('admin-card-header')
     <div class="row justify-content-between w-100 align-items-center">
         <div class="col-auto">
-            <span>All Categories</span>
+            <span>All Customers</span>
         </div>
 
-        <div class="col-auto">
-            <button class="btn btn-success navigate" data-src="/add-category">Add Category</button>
+        <div class="col-auto p-0">
+            <button class="btn btn-success navigate" data-src="/add-customer">Add Customers</button>
         </div>
     </div>
 @endsection
@@ -36,20 +36,19 @@
         </div>
     @endif
     <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable">
+        <table class="table table-bordered ajax" id="dataTable" data-load="/get-customer-list-ajax">
             <thead>
                 <tr>
                     <th>Sr No.</th>
-                    <th>Category Name</th>
+                    <th>Customer Details</th>
                     <th data-sort="false">Image</th>
                     <th>Created At</th>
                     <th>Updated At</th>
-                    <th>Sort Order</th>
                     <th>Status</th>
                     <th data-sort="false"></th>
                 </tr>
             </thead>
-            <tbody>
+            {{-- <tbody>
                 @php
                     $count = 1;
                 @endphp
@@ -87,7 +86,7 @@
                         </td>
                     </tr>
                 @endforeach
-            </tbody>
+            </tbody> --}}
         </table>
     </div>
     <div class="modal fade" id="deleteModal">
@@ -100,8 +99,8 @@
                 <div class="modal-body">
                     <div class="loader text-center"></div>
                     <div class="content">
-                        <input type="hidden" id="delCategoryId">
-                        Are you sure to want to delete category <strong id="delCategoryName"></strong> ?
+                        <input type="hidden" id="delUserId">
+                        Are you sure to want to delete customer <strong id="delUserName"></strong> ?
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -117,7 +116,7 @@
 <script>
     function getWarning(id) {
         $.ajax({
-            url: '/get-category/'+id,
+            url: '/get-customer/'+id,
             type: 'GET',
             beforeSend: function() {
                 $(".loader").html('<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>');
@@ -125,8 +124,8 @@
             },
             success: function(data) {
                 data = JSON.parse(data);
-                $("#delCategoryId").val(data['category_id']);
-                $("#delCategoryName").text(data['name']);
+                $("#delUserId").val(data['id']);
+                $("#delUserName").text(data['first_name'] + " " + data['last_name'] + "( "+data['email']+" )");
             },
             complete: function () {
                 $(".loader").html('');
@@ -137,15 +136,15 @@
 
     $(document).ready(function() {
         $("#deleteButton").click(function() {
-            window.location.href = "/delete-category/"+$("#delCategoryId").val()
+            window.location.href = "/delete-customer/"+$("#delUserId").val()
         });
 
         $(document).on("change", ".ajax-status", function() {
             var status = $(this).prop("checked");
-            var id = $(this).attr("id").split("_")[1]
+            var id = $(this).attr("id").split("_")[1];
             status = (status) ? "1" : "0";
             $.ajax({
-                url: '/category/change-status/'+id,
+                url: '/customer/change-status/'+id,
                 type: 'POST',
                 data: {status: status, _token: $("#csrf").val()},
                 beforeSend: function() {
